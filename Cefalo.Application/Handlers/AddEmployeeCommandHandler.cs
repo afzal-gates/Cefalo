@@ -12,15 +12,18 @@ public class AddEmployeeCommandHandler : IRequestHandler<AddEmployeeCommand, int
     private readonly IEmployeeRepository _EmployeeRepository;
     private readonly IMapper _mapper;
     private readonly ILogger<AddEmployeeCommandHandler> _logger;
+    private readonly IDapperContext _dapper;
 
-    public AddEmployeeCommandHandler(IEmployeeRepository EmployeeRepository, IMapper mapper, ILogger<AddEmployeeCommandHandler> logger)
+    public AddEmployeeCommandHandler(IEmployeeRepository EmployeeRepository, IMapper mapper, ILogger<AddEmployeeCommandHandler> logger, IDapperContext dapper)
     {
         _EmployeeRepository = EmployeeRepository;
         _mapper = mapper;
         _logger = logger;
+        _dapper = dapper;
     }
     public async Task<int> Handle(AddEmployeeCommand request, CancellationToken cancellationToken)
     {
+        //var obj = await _dapper.QueryAsync<dynamic>("SELECT * FROM Employees");
         var EmployeeEntity = _mapper.Map<Employee>(request);
         var generatedEmployee = await _EmployeeRepository.AddAsync(EmployeeEntity);
         _logger.LogInformation(($"Employee {generatedEmployee} successfully created."));

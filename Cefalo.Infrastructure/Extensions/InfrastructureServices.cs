@@ -1,4 +1,5 @@
-﻿using Cefalo.Core.Repositories;
+﻿using Cefalo.Core.Common;
+using Cefalo.Core.Repositories;
 using Cefalo.Infrastructure.Data;
 using Cefalo.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,12 @@ namespace Cefalo.Infrastructure.Extensions
 {
     public static class InfrastructureServices
     {
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection serviceCollection,
-        IConfiguration configuration)
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection serviceCollection
+            , IConfiguration configuration
+            )
         {
+            //serviceCollection.Configure<DatabaseOptions>(configuration.GetSection(key: nameof(DatabaseOptions)));
+            serviceCollection.AddScoped<IDapperContext, DapperContext>();
             serviceCollection.AddDbContext<AppDbContext>(options => options.UseSqlServer(
                 configuration.GetConnectionString("DefaultConnectionStrings")));
             serviceCollection.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));

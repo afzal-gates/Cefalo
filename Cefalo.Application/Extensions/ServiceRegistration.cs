@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Cefalo.Application.Behaviour;
+using Cefalo.Core.Common;
 
 namespace Cefalo.Application.Extensions;
 
