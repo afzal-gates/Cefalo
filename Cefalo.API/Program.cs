@@ -1,6 +1,8 @@
 using Cefalo.Application.Extensions;
+using Cefalo.Infrastructure.Data;
 using Cefalo.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 namespace Cefalo.API
@@ -23,7 +25,11 @@ namespace Cefalo.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cefalo.API", Version = "v1" });
             });
             var app = builder.Build();
-
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                db.Database.Migrate();
+            }
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
