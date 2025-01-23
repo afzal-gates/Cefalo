@@ -48,6 +48,7 @@ jobs:
 
     steps:
       - name: Download artifact from build job
+        run: sudo chmod -R 775 ${{env.DOTNET_ROOT}}/myapp
         uses: actions/download-artifact@v4
         with:
           name: .net-app
