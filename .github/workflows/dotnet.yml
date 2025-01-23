@@ -48,12 +48,12 @@ jobs:
 
     steps:
       - name: Download artifact from build job
-        run: sudo mkdir ${{env.DOTNET_ROOT}}/myapp
         uses: actions/download-artifact@v4
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
       - name: Deploy Github Pages
+        run: sudo mkdir ${{env.DOTNET_ROOT}}/myapp
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{secrets.TOKEN}}
