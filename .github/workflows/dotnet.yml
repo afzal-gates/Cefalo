@@ -1,0 +1,71 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Cefalo_CICD
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+env:
+  CI: false
+  DOTNET_VERSION: '7.0.x' 
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    - name: Set up dependency caching for faster builds
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
+
+    - name: Create Path        
+      run: sudo mkdir ${{env.DOTNET_ROOT}}/myapp
+    - name: Permission
+      run: sudo chmod -R 775 ${{env.DOTNET_ROOT}}/myapp
+      
+    - name: dotnet publish
+      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v4
+      with:
+        name: .net-app
+        path: ${{env.DOTNET_ROOT}}/myapp
+      
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref=='refs/heads/master'
+
+    steps:
+      - name: Create Path        
+        run: sudo mkdir ${{env.DOTNET_ROOT}}/myapp
+      - name: Permission
+        run: sudo chmod -R 775 ${{env.DOTNET_ROOT}}/myapp
+        
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+          #path: ${{env.DOTNET_ROOT}}/myapp
+      - name: Deploy Github Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{secrets.TOKEN}}
+          publish_dir: ./
+      
+    
