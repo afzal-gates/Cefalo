@@ -52,11 +52,10 @@ jobs:
         with:
           name: .net-app
           #path: ${{env.DOTNET_ROOT}}/myapp
-      - name: Deploy Github Pages
-        #run: sudo mkdir ${{env.DOTNET_ROOT}}/myapp
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{secrets.TOKEN}}
+     # - name: Deploy Github Pages
+      #  uses: peaceiris/actions-gh-pages@v3
+       # with:
+         # github_token: ${{secrets.TOKEN}}
           #publish_dir: ${{env.DOTNET_ROOT}}/myapp
       
     
