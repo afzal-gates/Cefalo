@@ -50,13 +50,14 @@ jobs:
     if: github.ref=='refs/heads/master'
 
     steps:
+      - name: Permission
+        run: sudo chmod -R 775 ${{env.DOTNET_ROOT}}/myapp
+        
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
-      - name: Permission
-        run: sudo chmod -R 775 ${{env.DOTNET_ROOT}}/myapp
       - name: Deploy Github Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
