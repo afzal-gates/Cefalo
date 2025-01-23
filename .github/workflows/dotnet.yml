@@ -31,8 +31,6 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release
 
-    - name: Create Path        
-      run: sudo mkdir ${{env.DOTNET_ROOT}}/myapp
       
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -50,6 +48,8 @@ jobs:
     if: github.ref=='refs/heads/master'
 
     steps:
+      - name: Create Path        
+        run: sudo mkdir ${{env.DOTNET_ROOT}}/myapp
       - name: Permission
         run: sudo chmod -R 775 ${{env.DOTNET_ROOT}}/myapp
         
