@@ -1,4 +1,4 @@
-# This workflow will build a .NET project
+v# This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
 name: Cefalo_CICD
@@ -8,7 +8,8 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
+env:
+  CI: false
 jobs:
   build:
 
